@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"name": "Project root",
+			"path": "."
+		},
+		{
+			"name": "client",
+			"path": "client"
+		},
+		{
+			"name": "api",
+			"path": "api"
+		}
+	],
+	"settings": {
+		"svg.preview.background": "dark-transparent"
+	}
+}

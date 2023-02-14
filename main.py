@@ -14,10 +14,9 @@ if img_path:
     image_orig = cv2.imread(img_path)
 else:
     print("Image path is not provided or invalid. Using images from ./z-input/")
-    # Load the Google Maps screenshot
-    image_orig = cv2.imread("./z-input/kirba.png")
-    # image_orig = cv2.imread("./z-input/city-flyover.png")
-
+    # Load any of the Google Maps screenshot
+    # image_orig = cv2.imread("./z-input/kirba.png")
+    image_orig = cv2.imread("./z-input/city-flyover.png")
 
 # # Load the Google Maps screenshot
 # image_orig = cv2.imread("./z-input/kirba.png")
@@ -75,3 +74,4 @@ graph_img = draw_graph(image_orig, graph)
 
 # save the graph image
 cv2.imwrite("./z-output/graph.png", graph_img)
+print("Output image path: ./z-output/graph.png")

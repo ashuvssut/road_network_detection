@@ -29,7 +29,7 @@ https://stackoverflow.com/questions/50210304/change-the-colors-within-certain-ra
 
    - Use thresholding to detect the roads (our ROI) apart from non-white areas (like water bodies and other non-road areas). 
 
-1. **Road Graph Network Detection**
+2. **Road Graph Network Detection**
    - You can not detect nodes from the image because a lot of nodes will be formed at road intersection points because the road lines are thick. So, first use the Guo-Hall thinning algorithm to perform thinning operation on road network to detect nodes.
    - Use Zhang-Suen node detection algorithm to detect nodes from the thinned network.
    - Use BFS edge detection algorithm to detect edges from the thinned network.

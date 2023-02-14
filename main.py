@@ -8,8 +8,12 @@ from draw import draw_graph
 
 
 # Load the Google Maps screenshot
-image = cv2.imread("./z-input/kirba.png")
-# image = cv2.imread("./z-input/city-flyover.png")
+image_orig = cv2.imread("./z-input/kirba.png")
+image_orig = cv2.imread("./z-input/city-flyover.png")
+
+# preserve the original image for using as background when drawing the graph
+# use this copy for image processing 
+image = image_orig.copy()
 
 # detect highway roads and display them in white color
 # take a HSV color space
@@ -52,7 +56,10 @@ graph = breadth_first_edge_detection(skeleton, image, graph)
 
 # draw the graph
 image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-graph_img = draw_graph(image, graph)
+
+image_orig = cv2.copyMakeBorder(image_orig, 10, 10, 10, 10,
+                                cv2.BORDER_CONSTANT, value=[0, 0, 0])
+graph_img = draw_graph(image_orig, graph)
 
 # save the graph image
 cv2.imwrite("./z-output/graph.png", graph_img)

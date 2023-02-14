@@ -1,8 +1,12 @@
 {
 	"folders": [
 		{
-			"name": "Research",
-			"path": "./.research/"
+			"name": "Final Edit",
+			"path": "./.research-final-algo//"
+		},
+		{
+			"name": "Research Playground",
+			"path": "./.research-dump/"
 		},
 		{
 			"name": "Project root",

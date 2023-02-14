@@ -8,8 +8,8 @@ from draw import draw_graph
 
 
 # Load the Google Maps screenshot
-image = cv2.imread("./input/kirba.png")
-# image = cv2.imread("./input/city-flyover.png")
+image = cv2.imread("./z-input/kirba.png")
+# image = cv2.imread("./z-input/city-flyover.png")
 
 # detect highway roads and display them in white color
 # take a HSV color space
@@ -55,4 +55,4 @@ image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 graph_img = draw_graph(image, graph)
 
 # save the graph image
-cv2.imwrite("./output/graph.png", graph_img)
+cv2.imwrite("./z-output/graph.png", graph_img)

@@ -5,14 +5,26 @@ import numpy as np
 from zhang_suen_node_detection import zhang_suen_node_detection
 from breadth_first_edge_detection import breadth_first_edge_detection
 from draw import draw_graph
+import sys
+
+print(sys.argv)
+img_path = sys.argv[1] if len(sys.argv) > 1 else None
+# check if the image path is valid else skip to use image_orig from cv2.imread
+if img_path:
+    image_orig = cv2.imread(img_path)
+else:
+    print("Image path is not provided or invalid. Using images from ./z-input/")
+    # Load the Google Maps screenshot
+    image_orig = cv2.imread("./z-input/kirba.png")
+    # image_orig = cv2.imread("./z-input/city-flyover.png")
 
 
-# Load the Google Maps screenshot
-image_orig = cv2.imread("./z-input/kirba.png")
-image_orig = cv2.imread("./z-input/city-flyover.png")
+# # Load the Google Maps screenshot
+# image_orig = cv2.imread("./z-input/kirba.png")
+# image_orig = cv2.imread("./z-input/city-flyover.png")
 
 # preserve the original image for using as background when drawing the graph
-# use this copy for image processing 
+# use this copy for image processing
 image = image_orig.copy()
 
 # detect highway roads and display them in white color

@@ -5,6 +5,7 @@ NODESIZESCALING = 750
 EDGETRANSPARENCYDIVIDER = 5
 EDGETRANSPARENCY = False
 
+
 def draw_graph(image, graph):
     """
     Draw the graph on the image by traversing the graph structure.
@@ -20,7 +21,7 @@ def draw_graph(image, graph):
     node_size = int(numpy.ceil((max(image.shape) / float(NODESIZESCALING))))
     return draw_nodes(tmp, graph, max(node_size, 1))
 
-# draw nodes
+
 def draw_nodes(img, graph, radius=1):
     """
     Draw all nodes on the input image.
@@ -41,24 +42,6 @@ def draw_nodes(img, graph, radius=1):
     return img
 
 
-# draw edges
-def find_max_edge_deviation(graph):
-    """
-    This methode calculates for each edge its standard deviation and also
-    tracks the maximum standard deviation among all edges.
-    The maximum standard deviation will then be stored in the graph.
-    """
-    max_standard_deviation = 0
-    for (x1, y1), (x2, y2) in graph.edges():
-        deviation = graph[(x1, y1)][(x2, y2)]['width_var']
-        standard_deviation = numpy.sqrt(deviation)
-        graph[(x1, y1)][(x2, y2)]['standard_deviation'] = standard_deviation
-
-        if max_standard_deviation < standard_deviation:
-            max_standard_deviation = standard_deviation
-
-    return max_standard_deviation
-
 def draw_edges(img, graph, col=(0, 0, 255)):
     """
     Draw network edges on the input image.
@@ -73,6 +56,23 @@ def draw_edges(img, graph, col=(0, 0, 255)):
         Input image img with nodes drawn into it
     """
     edg_img = numpy.copy(img)
+
+    def find_max_edge_deviation(graph):
+        """
+        This methode calculates for each edge its standard deviation and also
+        tracks the maximum standard deviation among all edges.
+        The maximum standard deviation will then be stored in the graph.
+        """
+        max_standard_deviation = 0
+        for (x1, y1), (x2, y2) in graph.edges():
+            deviation = graph[(x1, y1)][(x2, y2)]['width_var']
+            standard_deviation = numpy.sqrt(deviation)
+            graph[(x1, y1)][(x2, y2)]['standard_deviation'] = standard_deviation
+
+            if max_standard_deviation < standard_deviation:
+                max_standard_deviation = standard_deviation
+
+        return max_standard_deviation
 
     max_standard_deviation = 0
     if EDGETRANSPARENCY:

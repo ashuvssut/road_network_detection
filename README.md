@@ -39,3 +39,8 @@ https://stackoverflow.com/questions/50210304/change-the-colors-within-certain-ra
 - NEFI2 
   - https://nefi.mpi-inf.mpg.de/guide.php
   - https://www.nature.com/articles/srep15669#Sec5
+
+## Future Work
+- Enable node detection for points with degree of freedom = 2 on the thinned image **to place nodes on curved roads**. Currently only degree of freedom = 1 & >2 is enabled in the code. 
+  - ![](./.readme-assets/douglas.png)
+  - Utilize [Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to reduce the number of nodes on the curved roads. 

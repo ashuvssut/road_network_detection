@@ -1,4 +1,4 @@
-# Road network detection 
+# Road network detection [- 🔗 link ](https://twitter.com/ashuvssut/status/1625592282820014080)
 
 The Road network detection algorithm needs "clean" Maps Screenshots without landmarks, buildings, any labels or markers. You can use screenshots of google map from https://mapstyle.withgoogle.com/ with the following settings:
 ![https://mapstyle.withgoogle.com/](./.readme-assets/mapswithgoogle.png)

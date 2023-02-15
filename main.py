@@ -7,7 +7,6 @@ from breadth_first_edge_detection import breadth_first_edge_detection
 from draw import draw_graph
 import sys
 
-print(sys.argv)
 img_path = sys.argv[1] if len(sys.argv) > 1 else None
 # check if the image path is valid else skip to use image_orig from cv2.imread
 if img_path:
@@ -54,23 +53,30 @@ dilated_img = cv2.dilate(thresh, kernel, iterations=1)
 # Perform thinning using Guo-Hall algorithm
 skeleton = cv_algorithms.guo_hall(dilated_img)
 
+# Or, Perform thinning using Zhang-Suen algorithm
+# skeleton = cv_algorithms.zhang_suen(dilated_img)
+
+cv2.imwrite("./z-output/skeleton.png", skeleton)
 # add padding to get nodes from the image borders which start from white color
+pad = 10
 skeleton = cv2.copyMakeBorder(
-    skeleton, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value=[0, 0, 0])
-image = cv2.copyMakeBorder(dilated_img, 10, 10, 10, 10,
-                           cv2.BORDER_CONSTANT, value=[0, 0, 0])
+    skeleton, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+image = cv2.copyMakeBorder(
+    dilated_img, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[0, 0, 0])
 
 # detect nodes
 graph = zhang_suen_node_detection(skeleton)
 # detect edges
 graph = breadth_first_edge_detection(skeleton, image, graph)
-
 # draw the graph
 image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
-image_orig = cv2.copyMakeBorder(image_orig, 10, 10, 10, 10,
-                                cv2.BORDER_CONSTANT, value=[0, 0, 0])
+# add padding to the original image to draw the graph plots on it
+image_orig = cv2.copyMakeBorder(
+    image_orig, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[0, 0, 0])
 graph_img = draw_graph(image_orig, graph)
+# remove the padding
+graph_img = graph_img[pad:-pad, pad:-pad]
 
 # save the graph image
 cv2.imwrite("./z-output/graph.png", graph_img)

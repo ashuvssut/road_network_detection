@@ -20,6 +20,7 @@ else:
 # # Load the Google Maps screenshot
 # image_orig = cv2.imread("./z-input/kirba.png")
 # image_orig = cv2.imread("./z-input/city-flyover.png")
+# image_orig = cv2.imread("./.research-dump/0-test3.png")
 
 # preserve the original image for using as background when drawing the graph
 # use this copy for image processing
@@ -50,26 +51,25 @@ ret, thresh = cv2.threshold(gray, 250, 255, cv2.THRESH_BINARY)
 kernel = np.ones((2, 2), np.uint8)
 dilated_img = cv2.dilate(thresh, kernel, iterations=1)
 
+# add padding to get nodes from the image borders which start from white color
+pad = 3
+padded_dil = cv2.copyMakeBorder(
+    dilated_img, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+
 # Perform thinning using Guo-Hall algorithm
-skeleton = cv_algorithms.guo_hall(dilated_img)
+skeleton = cv_algorithms.guo_hall(padded_dil)
 
 # Or, Perform thinning using Zhang-Suen algorithm
 # skeleton = cv_algorithms.zhang_suen(dilated_img)
 
 cv2.imwrite("./z-output/skeleton.png", skeleton)
-# add padding to get nodes from the image borders which start from white color
-pad = 10
-skeleton = cv2.copyMakeBorder(
-    skeleton, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[0, 0, 0])
-image = cv2.copyMakeBorder(
-    dilated_img, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+
 
 # detect nodes
 graph = zhang_suen_node_detection(skeleton)
 # detect edges
-graph = breadth_first_edge_detection(skeleton, image, graph)
+graph = breadth_first_edge_detection(skeleton, graph)
 # draw the graph
-image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
 # add padding to the original image to draw the graph plots on it
 image_orig = cv2.copyMakeBorder(

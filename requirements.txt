@@ -1,0 +1,4 @@
+cv-algorithms==1.0.4
+networkx==3.0
+numpy==1.21.5
+opencv-python==4.7.0.68

@@ -1,10 +1,7 @@
 import cv2
-import numpy
 
-NODESIZESCALING = 750
-EDGETRANSPARENCYDIVIDER = 5
-EDGETRANSPARENCY = False
-
+NODESIZERADIUS = 1
+STROKEWIDTH = 1
 
 def draw_graph(image, graph):
     """
@@ -15,14 +12,13 @@ def draw_graph(image, graph):
         | *graph* : the graph information
 
     Returns:
-
+        The image with the graph drawn on it
     """
-    tmp = draw_edges(image, graph)
-    node_size = int(numpy.ceil((max(image.shape) / float(NODESIZESCALING))))
-    return draw_nodes(tmp, graph, max(node_size, 1))
+    tmp = draw_edges(image, graph, (0, 0, 255), 1)
+    return draw_nodes(tmp, graph, NODESIZERADIUS)
 
 
-def draw_nodes(img, graph, radius=1):
+def draw_nodes(img, graph, radius=NODESIZERADIUS):
     """
     Draw all nodes on the input image.
 
@@ -42,7 +38,7 @@ def draw_nodes(img, graph, radius=1):
     return img
 
 
-def draw_edges(img, graph, col=(0, 0, 255)):
+def draw_edges(img, graph, col=(0, 0, 255), stoke_width=STROKEWIDTH):
     """
     Draw network edges on the input image.
 
@@ -51,74 +47,16 @@ def draw_edges(img, graph, col=(0, 0, 255)):
         | *graph* : Input graph containing the edges
     Kwargs:
         | *col* : colour for drawing
+        | *stoke_width* : width of the stroke
 
     Returns:
         Input image img with nodes drawn into it
     """
-    edg_img = numpy.copy(img)
-
-    def find_max_edge_deviation(graph):
-        """
-        This methode calculates for each edge its standard deviation and also
-        tracks the maximum standard deviation among all edges.
-        The maximum standard deviation will then be stored in the graph.
-        """
-        max_standard_deviation = 0
-        for (x1, y1), (x2, y2) in graph.edges():
-            deviation = graph[(x1, y1)][(x2, y2)]['width_var']
-            standard_deviation = numpy.sqrt(deviation)
-            graph[(x1, y1)][(x2, y2)]['standard_deviation'] = standard_deviation
-
-            if max_standard_deviation < standard_deviation:
-                max_standard_deviation = standard_deviation
-
-        return max_standard_deviation
-
-    max_standard_deviation = 0
-    if EDGETRANSPARENCY:
-        max_standard_deviation = find_max_edge_deviation(graph)
 
     for (x1, y1), (x2, y2) in graph.edges():
         start = (y1, x1)
         end = (y2, x2)
-        diam = graph[(x1, y1)][(x2, y2)]['width']
-        # variance value computed during graph detection
-        width_var = graph[(x1, y1)][(x2, y2)]['width_var']
-        # compute edges standard deviation by applying sqrt(var(edge))
-        standard_dev = numpy.sqrt(width_var)
-        if diam == -1:
-            diam = 2
-        diam = int(round(diam))
-        if diam > 255:
-            print(
-                'Warning: edge diameter too large for display. Diameter has been reset.')
-            diam = 255
-        if EDGETRANSPARENCY:
-            edge_cur_standard_deviation = graph[(
-                x1, y1)][(x2, y2)]['standard_deviation']
 
-            # calculate the opacity based on the condition opacity_max_standard_deviation = 0.8
-            opacity = edge_cur_standard_deviation / max_standard_deviation * 0.8
+        cv2.line(img, start, end, col, stoke_width)
 
-            # access color triple
-            (b, g, r) = col
-
-            # set overlay in this case white
-            overlay = (0, 0, 0)
-            # compute target color based on the transparency formula
-            target_col = (b == 0 if 0 else opacity * 255 + (1 - opacity) * b,
-                          g == 0 if 0 else opacity * 255 + (1 - opacity) * g,
-                          r == 0 if 0 else opacity * 255 + (1 - opacity) * r)
-
-            # draw the line
-            cv2.line(edg_img, start, end, target_col, diam)
-
-        else:
-            # simply draw a red line since we are not in the edge transparency mode
-            cv2.line(edg_img, start, end, col, diam)
-
-    edg_img = cv2.addWeighted(img, 0.5, edg_img, 0.5, 0)
-
-    MAXIMUMSTANDARDDEVIATION = 0
-
-    return edg_img
+    return img

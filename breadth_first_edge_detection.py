@@ -1,6 +1,5 @@
 import numpy as np
 from collections import defaultdict
-from itertools import chain
 
 
 def breadth_first_edge_detection(skel, graph):
@@ -12,11 +11,6 @@ def breadth_first_edge_detection(skel, graph):
         | *pixels* : number of pixels on the edge in the skeleton
         | *length* : length in pixels, horizontal/vertikal steps count 1,
            diagonal steps count sqrt 2
-        | *width* : the mean diameter of the edge
-        | *width_var* : the variance of the width along the edge
-
-    The runtime is linear in the number of pixels.
-    White pixels are **much more** expensive though.
     """
     def neighbors(x, y):
         item = skel.item
@@ -31,19 +25,21 @@ def breadth_first_edge_detection(skel, graph):
 
     def get_px_length(x, y, a, b):
         return 1.414214 if abs(x - a) == 1 and abs(y - b) == 1 else 1
+    
     # compute edge length
     # initialize: the neighbor pixels of each node get a distinct label
     # each label gets a queue
     label_node = dict()
     queues = []
     label = 1
-    label_length = defaultdict(int)
+    label_length = dict()
     for x, y in graph.nodes():
         for a, b in neighbors(x, y):
             label_node[label] = (x, y)
             label_length[label] = get_px_length(x, y, a, b)
             queues.append((label, (x, y), [(a, b)]))
             label += 1
+
     # bfs over the white pixels.
     # One phase: every entry in queues is handled
     # Each label grows in every phase.
@@ -75,7 +71,5 @@ def breadth_first_edge_detection(skel, graph):
         if u == v:
             continue
         graph.add_edge(u, v, pixels=label_histogram[l1] + label_histogram[l2],
-                       length=label_length[l1] + label_length[l2],
-                       width=2,
-                       width_var=2)
+                       length=label_length[l1] + label_length[l2])
     return graph

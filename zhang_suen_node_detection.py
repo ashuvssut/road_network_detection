@@ -52,11 +52,11 @@ def zhang_suen_node_detection(skel):
 
         # The function A(p1),
         # where p1 is the pixel whose neighborhood is beeing checked
-        components = (p2 == 0 and p3 == 1) + (p3 == 0 and p4 == 1) + \
-                     (p4 == 0 and p5 == 1) + (p5 == 0 and p6 == 1) + \
-                     (p6 == 0 and p7 == 1) + (p7 == 0 and p8 == 1) + \
-                     (p8 == 0 and p9 == 1) + (p9 == 0 and p2 == 1)
-        if (components >= 3) or (components == 1):
+        nbs_count = (p2 == 0 and p3 == 1) + (p3 == 0 and p4 == 1) + \
+            (p4 == 0 and p5 == 1) + (p5 == 0 and p6 == 1) + \
+            (p6 == 0 and p7 == 1) + (p7 == 0 and p8 == 1) + \
+            (p8 == 0 and p9 == 1) + (p9 == 0 and p2 == 1)
+        if (nbs_count >= 3) or (nbs_count == 1):
             accept_pixel_as_node = True
         return accept_pixel_as_node
 

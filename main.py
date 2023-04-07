@@ -6,6 +6,7 @@ from zhang_suen_node_detection import zhang_suen_node_detection
 from breadth_first_edge_detection import breadth_first_edge_detection
 from draw import draw_graph
 import sys
+from dijkstra_usage import dijkstra_shortest_path
 
 img_path = sys.argv[1] if len(sys.argv) > 1 else None
 # check if the image path is valid else skip to use image_orig from cv2.imread
@@ -56,11 +57,11 @@ pad = 3
 padded_dil = cv2.copyMakeBorder(
     dilated_img, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[0, 0, 0])
 
-# Perform thinning using Guo-Hall algorithm
-skeleton = cv_algorithms.guo_hall(padded_dil)
+# Perform thinning using Zhang-Suen algorithm
+skeleton = cv_algorithms.zhang_suen(dilated_img)
 
-# Or, Perform thinning using Zhang-Suen algorithm
-# skeleton = cv_algorithms.zhang_suen(dilated_img)
+# Or, Perform thinning using Zhang-suen thinning algorithm
+# skeleton = cv_algorithms.guo_hall(padded_dil)
 
 cv2.imwrite("./z-output/skeleton.png", skeleton)
 
@@ -74,6 +75,7 @@ graph = breadth_first_edge_detection(skeleton, graph)
 # add padding to the original image to draw the graph plots on it
 image_orig = cv2.copyMakeBorder(
     image_orig, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+skeleton = cv2.cvtColor(skeleton, cv2.COLOR_GRAY2BGR)
 graph_img = draw_graph(image_orig, graph)
 # remove the padding
 graph_img = graph_img[pad:-pad, pad:-pad]
@@ -81,3 +83,10 @@ graph_img = graph_img[pad:-pad, pad:-pad]
 # save the graph image
 cv2.imwrite("./z-output/graph.png", graph_img)
 print("Output image path: ./z-output/graph.png")
+
+# Use the graph data to find the shortest path between two nodes using dijkstra's algorithm and draw the path on the original image
+# print("Graph nodes: ", graph.nodes())
+start_node = (53, 667)
+end_node = (758, 1024)
+dijkstra_output = dijkstra_shortest_path(graph, image_orig, start_node, end_node)
+cv2.imwrite("./z-output/dijkstra.png", dijkstra_output)

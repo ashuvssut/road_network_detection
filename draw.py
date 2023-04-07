@@ -32,9 +32,12 @@ def draw_nodes(img, graph, radius=NODESIZERADIUS):
     Returns:
         Input image img with nodes drawn into it
     """
+    
     for x, y in graph.nodes():
         cv2.rectangle(img, (y - radius, x - radius), (y + radius, x + radius),
                       (255, 0, 0), -1)
+        # cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+        # cv2.addText(img, str(x) + "," + str(y), (y, x), "Arial", 10, (255, 0, 0))
     return img
 
 

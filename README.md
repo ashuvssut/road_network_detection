@@ -22,25 +22,9 @@ opencv-python==4.7.0.68
 ```
 
 ## Implementation
-
-1. **Road Detection**
-   - Load the "clean" map screenshot. You can not use simple thresholding to detect all the roads because highway roads belong to a different color space than regular roads. So, use HSV color space to detect the highway roads (Ref [this](
-https://stackoverflow.com/questions/50210304/change-the-colors-within-certain-range-to-another-color-using-opencv)). Then, use the mask image generated using the HSV color space to replace the highway roads with white color. 
-
-   - Use thresholding to detect the roads (our ROI) apart from non-white areas (like water bodies and other non-road areas). 
-
-2. **Road Graph Network Detection**
-   - You can not detect nodes from the image because a lot of nodes will be formed at road intersection points because the road lines are thick. So, first use the Guo-Hall thinning algorithm to perform thinning operation on road network to detect nodes.
-   - Use Zhang-Suen node detection algorithm to detect nodes from the thinned network.
-   - Use BFS edge detection algorithm to detect edges from the thinned network.
-   - Plot the graph data structure on the original image. See `/z-output/graph.png`
-
+See https://docs.google.com/document/d/15D3AVszg0GRrYaToa6aiCSQ3aPUiu3zRsPIFWeYtZm0/edit#heading=h.oislpifv04z4
 ## References
-- NEFI2 
-  - https://nefi.mpi-inf.mpg.de/guide.php
-  - https://www.nature.com/articles/srep15669#Sec5
+See https://docs.google.com/document/d/15D3AVszg0GRrYaToa6aiCSQ3aPUiu3zRsPIFWeYtZm0/edit#heading=h.g74h65komzxz
 
 ## Future Work
-- Enable node detection for points with degree of freedom = 2 on the thinned image **to place nodes on curved roads**. Currently only degree of freedom = 1 & >2 is enabled in the code. 
-  - ![](./.readme-assets/douglas.png)
-  - Utilize [Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to reduce the number of nodes on the curved roads. 
+See https://docs.google.com/document/d/15D3AVszg0GRrYaToa6aiCSQ3aPUiu3zRsPIFWeYtZm0/edit#heading=h.6z64lx9akiy5
